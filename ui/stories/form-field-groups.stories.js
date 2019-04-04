@@ -23,6 +23,25 @@ const MODELS = {
 
 const DEFAULT_VALUE = 'aws/client';
 
+const createAttr = (name, type, options) => {
+  return {
+    name,
+    type,
+    options,
+  };
+};
+
+const FAKE_MODEL = {
+  organization: createAttr('organization', 'string'),
+  sensitive: createAttr('sensitive', 'boolean', { defaultValue: false }),
+  fieldGroups: [
+    { default: ['organization'] },
+    {
+      'Auth options': ['sensitive'],
+    },
+  ],
+};
+
 storiesOf('Form/FormFieldGroups/', module)
   .addParameters({ options: { showPanel: true } })
   .addDecorator(withKnobs())
@@ -31,7 +50,7 @@ storiesOf('Form/FormFieldGroups/', module)
     () => ({
       template: hbs`
         <h5 class="title is-5">Form Field Groups</h5>
-        <FormFieldGroups @model={{compute (action 'getModel' model)}} />
+        <FormFieldGroups @model={{model}} />
     `,
       context: {
         actions: {
@@ -41,7 +60,7 @@ storiesOf('Form/FormFieldGroups/', module)
               .createRecord(`auth-config/${modelType}`);
           },
         },
-        model: select('model', MODELS, DEFAULT_VALUE),
+        model: FAKE_MODEL,
       },
     }),
     { notes }
